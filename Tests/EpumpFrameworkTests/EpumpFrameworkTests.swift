@@ -1,12 +1,13 @@
 import XCTest
+import SwiftUI
 @testable import EpumpFramework
 
 final class EpumpFrameworkTests: XCTestCase {
+    @State var text: String = ""
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(EpumpFramework().text, "Hello, World!")
+        var body: some View{
+            EpumpFramework.MainTextField(placeholder: "Testing", text: $text)
+        }
     }
 
     static var allTests = [
