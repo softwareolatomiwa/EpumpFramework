@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		967786C025C0A696004033D3 /* EPWifi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967786BF25C0A696004033D3 /* EPWifi.swift */; };
 		OBJ_23 /* EpumpFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* EpumpFramework.swift */; };
 		OBJ_30 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_41 /* EpumpFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* EpumpFrameworkTests.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		967786BF25C0A696004033D3 /* EPWifi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPWifi.swift; sourceTree = "<group>"; };
 		969F3F8325C050A90084E12A /* EpumpFramework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EpumpFramework.podspec; sourceTree = "<group>"; };
 		"EpumpFramework::EpumpFramework::Product" /* EpumpFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EpumpFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"EpumpFramework::EpumpFrameworkTests::Product" /* EpumpFrameworkTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = EpumpFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_9 /* EpumpFramework.swift */,
+				967786BF25C0A696004033D3 /* EPWifi.swift */,
 			);
 			name = EpumpFramework;
 			path = Sources/EpumpFramework;
@@ -216,6 +219,7 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_23 /* EpumpFramework.swift in Sources */,
+				967786C025C0A696004033D3 /* EPWifi.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
