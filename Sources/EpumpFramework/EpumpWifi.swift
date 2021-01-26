@@ -5,12 +5,13 @@
 //  Created by Fuelmetrics Limited on 26/01/2021.
 //
 
+import SwiftUI
 import Network
 import NetworkExtension
 
 public class EpumpWifi{
     //var status: String = ""
-    var connection: NWConnection?
+    @State var connection: NWConnection?
     var ip: Network.NWEndpoint.Host
     var port: Network.NWEndpoint.Port
     var ssid: String
