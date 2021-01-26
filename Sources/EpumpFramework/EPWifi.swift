@@ -33,7 +33,7 @@ public class EPWifi{
     }
     
     private func connectWifi(ssid: String, password: String){
-        let configuration = NEHotspotConfiguration.init(ssid: ssid, passphrase: password, isWEP: true)
+        let configuration = NEHotspotConfiguration.init(ssid: ssid, passphrase: password, isWEP: false)
         configuration.joinOnce = true
         NEHotspotConfigurationManager.shared.apply(configuration, completionHandler: {
             (error) in

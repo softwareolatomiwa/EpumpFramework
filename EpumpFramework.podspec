@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "EpumpFramework"
-  spec.version      = "0.1.6"
+  spec.version      = "0.1.8"
   spec.summary      = "A short description of EpumpFramework."
 
   # This description is used to generate tags and improve search results.
@@ -56,7 +56,7 @@ Pod::Spec.new do |spec|
   spec.author             = { "Oluwawibe Christian" => "softwareolatomiwa@gmail.com" }
   # Or just: spec.author    = "softwareolatomiwa"
   # spec.authors            = { "Oluwawibe Christian" => "softwareolatomiwa@gmail.com" }
-  spec.social_media_url   = "https://twitter.com/softwareolatomiwa"
+  spec.social_media_url   = "https://twitter.com/tomiwaoluwawibe"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
