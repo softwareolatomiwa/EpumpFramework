@@ -1,5 +1,5 @@
 //
-//  WifiConnection.swift
+//  EpumpWifi.swift
 //  EpumpFramework
 //
 //  Created by Fuelmetrics Limited on 26/01/2021.
@@ -7,6 +7,7 @@
 
 import Network
 import NetworkExtension
+
 public class EpumpWifi{
     //var status: String = ""
     var connection: NWConnection?
