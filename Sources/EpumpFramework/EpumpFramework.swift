@@ -23,11 +23,11 @@ public struct EpumpFramework {
             }.padding()
             .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 2))
             
-//            Button(action: {
-//                EpumpWifi.init(ssid: "Remis-2", passphrase: "P@55w0rdL3n914", ip: "192.168.4.2", port: 8080)
-//            }){
-//                Text("Connect")
-//            }
+            Button(action: {
+                EpumpWifi.init(ssid: "Remis-2", passphrase: "P@55w0rdL3n914", ip: "192.168.4.2", port: 8080)
+            }){
+                Text("Connect")
+            }
         }
     }
 }
