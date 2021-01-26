@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		969F3F9525C05EC30084E12A /* EpumpWifi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969F3F9425C05EC30084E12A /* EpumpWifi.swift */; };
 		OBJ_23 /* EpumpFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* EpumpFramework.swift */; };
 		OBJ_30 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_41 /* EpumpFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* EpumpFrameworkTests.swift */; };
@@ -47,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		969F3F8325C050A90084E12A /* EpumpFramework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EpumpFramework.podspec; sourceTree = "<group>"; };
+		969F3F9425C05EC30084E12A /* EpumpWifi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpumpWifi.swift; sourceTree = "<group>"; };
 		"EpumpFramework::EpumpFramework::Product" /* EpumpFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EpumpFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"EpumpFramework::EpumpFrameworkTests::Product" /* EpumpFrameworkTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = EpumpFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_12 /* EpumpFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpumpFrameworkTests.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_9 /* EpumpFramework.swift */,
+				969F3F9425C05EC30084E12A /* EpumpWifi.swift */,
 			);
 			name = EpumpFramework;
 			path = Sources/EpumpFramework;
@@ -216,6 +219,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				969F3F9525C05EC30084E12A /* EpumpWifi.swift in Sources */,
 				OBJ_23 /* EpumpFramework.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
