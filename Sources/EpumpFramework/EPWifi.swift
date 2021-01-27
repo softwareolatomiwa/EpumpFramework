@@ -8,8 +8,10 @@
 import Network
 import NetworkExtension
 
+
 public class EPWifi{
     //var status: String = ""
+    var notifier: NotificationCenter?
     var connection: NWConnection?
     var ip: Network.NWEndpoint.Host
     var port: Network.NWEndpoint.Port
@@ -30,6 +32,8 @@ public class EPWifi{
         self.port = NWEndpoint.Port.init(rawValue: UInt16(port)) ?? 5555
         
         self.connectWifi(ssid: ssid, password: password)
+        
+        notifier = NotificationCenter.default
     }
     
     private func connectWifi(ssid: String, password: String){
@@ -87,9 +91,8 @@ public class EPWifi{
         connection.receive(minimumIncompleteLength: 1, maximumLength: 1024) { (data, contentContext, isComplete, error) in
             if let data = data, !data.isEmpty {
                 // … process the data …
-                self.manageStatus("did receive \(data.count) bytes")
                 let msg = String(data: data, encoding: .utf8)
-                self.manageStatus(msg ?? "")
+                self.notify(receiver: "remote_message", message: msg!)
             }
             if let error = error {
                 NSLog("did receive, error: %@", "\(error)")
@@ -99,7 +102,6 @@ public class EPWifi{
             if isComplete {
                 // … handle end of stream …
                 self.EOF(status: "EOF")
-                self.setupReceive(on: connection)
             } else if let error = error {
                 // … handle error …
                 self.connectionDidFail(error: error)
@@ -137,5 +139,10 @@ public class EPWifi{
     
     private func manageStatus(_ status: String){
         debugPrint(status)
+        self.notify(receiver: "connection_status", message: status)
+    }
+    
+    private func notify(receiver: String, message: String){
+        notifier?.post(name: NSNotification.Name(receiver), object: message as AnyObject)
     }
 }
