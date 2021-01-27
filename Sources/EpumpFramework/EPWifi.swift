@@ -92,7 +92,7 @@ public class EPWifi{
             if let data = data, !data.isEmpty {
                 // … process the data …
                 let msg = String(data: data, encoding: .utf8)
-                self.notify(receiver: "remote_message", message: msg!)
+                self.notify(receiver: "remote.message", message: msg!)
             }
             if let error = error {
                 NSLog("did receive, error: %@", "\(error)")
@@ -139,10 +139,10 @@ public class EPWifi{
     
     private func manageStatus(_ status: String){
         debugPrint(status)
-        self.notify(receiver: "connection_status", message: status)
+        self.notify(receiver: "connection.status", message: status)
     }
     
     private func notify(receiver: String, message: String){
-        notifier?.post(name: NSNotification.Name(receiver), object: message as AnyObject)
+        notifier?.post(name: NSNotification.Name(receiver), object: nil, userInfo: ["userInfo": message])
     }
 }
