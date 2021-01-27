@@ -68,7 +68,8 @@ public class EPWifi{
         case .setup:
             manageStatus("Setting Up Connection")
         case .waiting(let error):
-            self.connectionDidFail(error: error)
+            debugPrint(error.debugDescription)
+            manageStatus("Waiting for Connection")
         case .preparing:
             manageStatus("Preparing Connection")
         case .ready:
@@ -83,14 +84,22 @@ public class EPWifi{
     }
     
     private func setupReceive(on connection: NWConnection) {
-        connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { (data, contentContext, isComplete, error) in
+        connection.receive(minimumIncompleteLength: 1, maximumLength: 1024) { (data, contentContext, isComplete, error) in
             if let data = data, !data.isEmpty {
                 // … process the data …
                 self.manageStatus("did receive \(data.count) bytes")
+                let msg = String(data: data, encoding: .utf8)
+                self.manageStatus(msg ?? "")
+            }
+            if let error = error {
+                NSLog("did receive, error: %@", "\(error)")
+                self.connectSocket()
+                return
             }
             if isComplete {
                 // … handle end of stream …
-                self.stop(status: "EOF")
+                self.EOF(status: "EOF")
+                self.setupReceive(on: connection)
             } else if let error = error {
                 // … handle error …
                 self.connectionDidFail(error: error)
@@ -100,11 +109,29 @@ public class EPWifi{
         }
     }
     
+    public func sendMessage(message: String){
+        let data = message.data(using: .utf8)
+        if connection != nil {
+            connection?.send(content: data, completion: NWConnection.SendCompletion.contentProcessed { error in
+                if let error = error {
+                    NSLog("did send, error: %@", "\(error)")
+                    self.endConnection()
+                } else {
+                    NSLog("did send, data: %@", data! as NSData)
+                }
+            })
+        }
+    }
+    
+    public func endConnection(){
+        self.connection?.cancel()
+    }
+    
     private func connectionDidFail(error: Error) {
         manageStatus(error.localizedDescription)
     }
 
-    private func stop(status: String) {
+    private func EOF(status: String) {
         manageStatus(status)
     }
     
