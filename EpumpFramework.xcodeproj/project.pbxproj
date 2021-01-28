@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		96613D7D25C2AF0F0030DAF3 /* EPConnectionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96613D7C25C2AF0F0030DAF3 /* EPConnectionMessage.swift */; };
+		96613D8325C2BB290030DAF3 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96613D8225C2BB290030DAF3 /* Utility.swift */; };
 		967786C025C0A696004033D3 /* EPWifi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967786BF25C0A696004033D3 /* EPWifi.swift */; };
 		OBJ_23 /* EpumpFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* EpumpFramework.swift */; };
 		OBJ_30 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		96613D7C25C2AF0F0030DAF3 /* EPConnectionMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPConnectionMessage.swift; sourceTree = "<group>"; };
+		96613D8225C2BB290030DAF3 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		967786BF25C0A696004033D3 /* EPWifi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPWifi.swift; sourceTree = "<group>"; };
 		969F3F8325C050A90084E12A /* EpumpFramework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EpumpFramework.podspec; sourceTree = "<group>"; };
 		"EpumpFramework::EpumpFramework::Product" /* EpumpFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EpumpFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -129,6 +133,8 @@
 			children = (
 				OBJ_9 /* EpumpFramework.swift */,
 				967786BF25C0A696004033D3 /* EPWifi.swift */,
+				96613D7C25C2AF0F0030DAF3 /* EPConnectionMessage.swift */,
+				96613D8225C2BB290030DAF3 /* Utility.swift */,
 			);
 			name = EpumpFramework;
 			path = Sources/EpumpFramework;
@@ -218,8 +224,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				96613D8325C2BB290030DAF3 /* Utility.swift in Sources */,
 				OBJ_23 /* EpumpFramework.swift in Sources */,
 				967786C025C0A696004033D3 /* EPWifi.swift in Sources */,
+				96613D7D25C2AF0F0030DAF3 /* EPConnectionMessage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

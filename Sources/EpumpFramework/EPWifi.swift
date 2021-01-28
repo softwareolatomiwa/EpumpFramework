@@ -8,8 +8,7 @@
 import Network
 import NetworkExtension
 
-
-public class EPWifi{
+public class EPWifi {
     //var status: String = ""
     var notifier: NotificationCenter?
     var connection: NWConnection?
@@ -17,19 +16,30 @@ public class EPWifi{
     var port: Network.NWEndpoint.Port
     var ssid: String
     var password: String
+    var comm_channel: String
+    var pump_name: String
+    var encryptionKey: String
+    var phone: String
     
-    
-    /// Connect to WiFi ssid with passphrase and upon successful coonnection, connect to socket using the IP and Port
+    /// Connect to WiFi ssid with passphrase and upon successful coonnection, connect to socket using the IP and Port and send intialization message to server
     /// - Parameters:
     ///   - ssid: SSID to connect to
     ///   - passphrase: Passphrase of the WiFi
     ///   - ip: Socket IP
     ///   - port: Socket Port
-    public init(ssid: String, passphrase: String, ip: String, port: Int){
+    ///   - encryptionKey: Epump Daily Encryption Key
+    ///   - comm_channel: Communication Channel (Remis - r, Voucher - v)
+    ///   - pump_name: Communication Channel (Remis - r, Voucher - v)
+    ///   - phone: User Phone Number (optional for voucher)
+    public init(ssid: String, passphrase: String, ip: String, port: Int, encryptionKey: String, comm_channel: String, pump_name: String, phone: String){
         self.ssid = ssid
         self.password = passphrase
         self.ip = NWEndpoint.Host.init(ip)
         self.port = NWEndpoint.Port.init(rawValue: UInt16(port)) ?? 5555
+        self.comm_channel = comm_channel
+        self.pump_name = pump_name
+        self.phone = phone
+        self.encryptionKey = encryptionKey
         
         self.connectWifi(ssid: ssid, password: password)
         
@@ -43,7 +53,7 @@ public class EPWifi{
             (error) in
             if error != nil{
                 if let errorStr = error?.localizedDescription {
-                    self.manageStatus("Error Information:\(errorStr)")
+                    self.manageStatus(errorStr)
                 }
                 if (error?.localizedDescription == "already associated.") {
                     self.manageStatus("Connected to WiFi!")
@@ -78,13 +88,42 @@ public class EPWifi{
             manageStatus("Preparing Connection")
         case .ready:
             manageStatus("Successfully Connected")
+            manageConnectedStatus("true")
         case .failed(let error):
             self.connectionDidFail(error: error)
         case .cancelled:
+            manageStatus("Disconnected")
             break
         @unknown default:
             break
         }
+    }
+    
+    private func initMessage(){
+        let conn_id = Utility.randomString(len: 6)
+        let serverKey = self.encryptionKey
+        let phone = self.phone
+        let stringToHash = "\(serverKey)\(phone)\(self.pump_name)\(conn_id)"
+        let hash = Utility.sha1Hash(message: stringToHash)
+        var conn_msg = EPConnectionMessage()
+        conn_msg.ch = self.comm_channel
+        
+        switch self.comm_channel {
+            case Comm_Channel.Remis.rawValue:
+                conn_msg.sh = hash
+                conn_msg.tg = phone
+            default:
+                break
+        }
+        
+        conn_msg.sid = conn_id
+        conn_msg.pn = self.pump_name
+        
+        let jsonEncoder = JSONEncoder()
+        let jsonData = try? jsonEncoder.encode(conn_msg)
+        let json = String(data: jsonData!, encoding: .utf8)
+        
+        self.sendMessage(message: json!)
     }
     
     private func setupReceive(on connection: NWConnection) {
@@ -92,7 +131,7 @@ public class EPWifi{
             if let data = data, !data.isEmpty {
                 // … process the data …
                 let msg = String(data: data, encoding: .utf8)
-                self.notify(receiver: "remote.message", message: msg!)
+                self.notify(receiver: "tcp_message", message: msg!)
             }
             if let error = error {
                 NSLog("did receive, error: %@", "\(error)")
@@ -101,7 +140,7 @@ public class EPWifi{
             }
             if isComplete {
                 // … handle end of stream …
-                self.EOF(status: "EOF")
+                self.endConnection()
             } else if let error = error {
                 // … handle error …
                 self.connectionDidFail(error: error)
@@ -127,6 +166,7 @@ public class EPWifi{
     
     public func endConnection(){
         self.connection?.cancel()
+        manageConnectedStatus("false")
     }
     
     private func connectionDidFail(error: Error) {
@@ -138,11 +178,14 @@ public class EPWifi{
     }
     
     private func manageStatus(_ status: String){
-        debugPrint(status)
-        self.notify(receiver: "connection.status", message: status)
+        self.notify(receiver: "tcp_connection_status", message: status)
+    }
+    
+    private func manageConnectedStatus(_ status: String){
+        self.notify(receiver: "tcp_connection", message: status)
     }
     
     private func notify(receiver: String, message: String){
-        notifier?.post(name: NSNotification.Name(receiver), object: nil, userInfo: ["userInfo": message])
+        notifier?.post(name: NSNotification.Name(receiver), object: nil, userInfo: ["socketMessage": message])
     }
 }
