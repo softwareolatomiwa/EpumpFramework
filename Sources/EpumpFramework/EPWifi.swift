@@ -89,6 +89,7 @@ public class EPWifi {
         case .ready:
             manageStatus("Successfully Connected")
             manageConnectedStatus("true")
+            initMessage()
         case .failed(let error):
             self.connectionDidFail(error: error)
         case .cancelled:
@@ -132,6 +133,13 @@ public class EPWifi {
                 // … process the data …
                 let msg = String(data: data, encoding: .utf8)
                 self.notify(receiver: "tcp_message", message: msg!)
+                
+                let decoder = JSONDecoder()
+                let socketResp = try! decoder.decode(SocketResponse.self, from: data)
+                
+                if socketResp.tk != -1 && socketResp.tk != 0 {
+                    self.replyToken(token: socketResp.tk)
+                }
             }
             if let error = error {
                 NSLog("did receive, error: %@", "\(error)")
@@ -140,7 +148,7 @@ public class EPWifi {
             }
             if isComplete {
                 // … handle end of stream …
-                self.endConnection()
+                //self.endConnection()
             } else if let error = error {
                 // … handle error …
                 self.connectionDidFail(error: error)
@@ -162,6 +170,11 @@ public class EPWifi {
                 }
             })
         }
+    }
+    
+    private func replyToken(token: CLong){
+        let msg = "{\"tk\":\(token),\"st\":0}"
+        sendMessage(message: msg)
     }
     
     public func endConnection(){
@@ -187,5 +200,9 @@ public class EPWifi {
     
     private func notify(receiver: String, message: String){
         notifier?.post(name: NSNotification.Name(receiver), object: nil, userInfo: ["socketMessage": message])
+    }
+    
+    func showTransactionProgress() {
+        EPTransactionProgress.ProgressView()
     }
 }

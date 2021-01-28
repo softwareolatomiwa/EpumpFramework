@@ -29,3 +29,11 @@ public enum Comm_Channel: String{
     case Remis = "r"
     case Voucher = "v"
 }
+
+public class SocketResponse: Decodable{
+    public var cm: String = ""
+    public var st: Int = 0
+    public var er: Int = 0
+    public var tk: CLong = 0
+    public var di: String = ""
+}
