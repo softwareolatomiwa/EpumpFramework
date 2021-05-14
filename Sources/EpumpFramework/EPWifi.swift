@@ -7,6 +7,7 @@
 
 import Network
 import NetworkExtension
+import SwiftUI
 
 public class EPWifi {
     //var status: String = ""
@@ -20,6 +21,8 @@ public class EPWifi {
     var pump_name: String
     var encryptionKey: String
     var phone: String
+    var wifiConnect: NEHotspotConfigurationManager
+    var disconnected: Bool
     
     /// Connect to WiFi ssid with passphrase and upon successful coonnection, connect to socket using the IP and Port and send intialization message to server
     /// - Parameters:
@@ -40,16 +43,23 @@ public class EPWifi {
         self.pump_name = pump_name
         self.phone = phone
         self.encryptionKey = encryptionKey
+        self.wifiConnect = NEHotspotConfigurationManager.shared
+        self.disconnected = false
         
         self.connectWifi(ssid: ssid, password: password)
         
         notifier = NotificationCenter.default
+        NotificationCenter.default.addObserver(self, selector: #selector(connectionCloseEvent), name: Notification.Name("tcp_close_connection"), object: nil)
+    }
+    
+    @objc func connectionCloseEvent(_:Notification) {
+        self.endConnection()
     }
     
     private func connectWifi(ssid: String, password: String){
         let configuration = NEHotspotConfiguration.init(ssid: ssid, passphrase: password, isWEP: false)
         configuration.joinOnce = true
-        NEHotspotConfigurationManager.shared.apply(configuration, completionHandler: {
+        self.wifiConnect.apply(configuration, completionHandler: {
             (error) in
             if error != nil{
                 if let errorStr = error?.localizedDescription {
@@ -81,19 +91,26 @@ public class EPWifi {
         switch state {
         case .setup:
             manageStatus("Setting Up Connection")
-        case .waiting(let error):
-            debugPrint(error.debugDescription)
+            break
+        case .waiting( _):
             manageStatus("Waiting for Connection")
+            break
         case .preparing:
             manageStatus("Preparing Connection")
+            break
         case .ready:
-            manageStatus("Successfully Connected")
-            manageConnectedStatus("true")
-            initMessage()
+            if !self.disconnected{
+                manageStatus("Successfully Connected")
+                manageConnectedStatus("true")
+                initMessage()
+            }
+            break
         case .failed(let error):
             self.connectionDidFail(error: error)
+            break
         case .cancelled:
             manageStatus("Disconnected")
+            self.wifiConnect.removeConfiguration(forSSID: self.ssid)
             break
         @unknown default:
             break
@@ -178,8 +195,10 @@ public class EPWifi {
     }
     
     public func endConnection(){
-        self.connection?.cancel()
+        self.connection?.forceCancel()
         manageConnectedStatus("false")
+        self.connection = nil
+        self.disconnected = true
     }
     
     private func connectionDidFail(error: Error) {
@@ -202,7 +221,10 @@ public class EPWifi {
         notifier?.post(name: NSNotification.Name(receiver), object: nil, userInfo: ["socketMessage": message])
     }
     
-    func showTransactionProgress() {
-        EPTransactionProgress.ProgressView()
+    
+    public struct showTransactionProgress: View {
+        public var body: some View{
+            EPTransactionProgress.ProgressView()
+        }
     }
 }
